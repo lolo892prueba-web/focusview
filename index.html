@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+ <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusView - Max Inspirate y Empuja</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="redirect-to-port-5000.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-section">
+                <div class="logo-circle">
+                <!-- 
+                    INSTRUCCIONES PARA EL LOGO:
+                    1. Guarda tu logo en la misma carpeta que este archivo HTML
+                    2. Reemplaza "logo.png" con el nombre de tu archivo
+                    Ejemplo: si tu logo se llama "mi-logo.jpg" cambia a:
+                    <img src="mi-logo.jpg" alt="FocusView Logo" ...>
+                -->
+                <img src="imagen_circular_recortada (1).png" alt="FocusView Logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                <div class="logo-fallback hidden"></div>
+            </div>
+            <div class="logo-text">
+                <h1>FocusView</h1>
+                <p>Max Inspirate y Empuja</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar inspiración..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+            </div>
+            <div class="settings-icon" onclick="openSettings()">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <a href="#" class="active" onclick="changeCategory(event, 'inicio')">INICIO</a>
+        <a href="#" onclick="changeCategory(event, 'tecnologia')">TECNOLOGÍA</a>
+        <a href="#" onclick="changeCategory(event, 'paisajes')">PAISAJES</a>
+        <a href="#" onclick="changeCategory(event, 'animales')">ANIMALES</a>
+        <a href="#" onclick="changeCategory(event, 'arte')">ARTE</a>
+        <a href="#" onclick="changeCategory(event, 'fotografia')">FOTOGRAFÍA</a>
+        <a href="#" onclick="changeCategory(event, 'arquitectura')">ARQUITECTURA</a>
+        <a href="#" onclick="changeCategory(event, 'diseño')">DISEÑO</a>
+        <a href="#" onclick="changeCategory(event, 'naturaleza')">NATURALEZA</a>
+        <a href="#" onclick="changeCategory(event, 'viajes')">VIAJES</a>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-icon active" onclick="activateSidebar(event, 'home')">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="sidebar-icon" onclick="activateSidebar(event, 'explore')">
+                <i class="fas fa-compass"></i>
+            </div>
+            <div class="sidebar-icon" onclick="openUploadModal()">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="sidebar-icon" onclick="showNotifications()">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="sidebar-icon" onclick="openChat()">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="sidebar-icon icon-user" onclick="openProfile()">
+                <i class="fas fa-user"></i>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <div class="content-header">
+                <h2>Descubre Contenido Inspirador</h2>
+                <p>Explora las mejores creaciones de nuestra comunidad</p>
+            </div>
+
+            <div class="gallery" id="gallery">
+                <!-- Item 1 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder bg-grad-1">
+                        <!-- CAMBIA ESTA URL POR TU IMAGEN -->
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Paisaje">
+                        <i class="fas fa-mountain"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(1)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(1)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(1)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Paisaje Montañoso al Atardecer</div>
+                        <div class="item-author">
+                            <div class="author-avatar">MR</div>
+                            <span>María Rodríguez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.2K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 5.4K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-280 bg-grad-2">
+                        <img src="https://images.unsplash.com/photo-1477346611705-65d1883cee1e" alt="Paisaje">
+                        <i class="fas fa-camera-retro"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(2)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(2)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(2)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Fotografía Urbana Nocturna</div>
+                        <div class="item-author">
+                            <div class="author-avatar">JG</div>
+                            <span>Juan García</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 892</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 3.1K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-350 bg-grad-3">
+                        <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809" alt="Arte">
+                        <i class="fas fa-palette"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(3)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(3)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(3)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Arte Digital Abstracto</div>
+                        <div class="item-author">
+                            <div class="author-avatar">AL</div>
+                            <span>Ana López</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.5K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 6.2K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-300 bg-grad-4">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="Comida">
+                        <i class="fas fa-utensils"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(4)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(4)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(4)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Delicia Culinaria</div>
+                        <div class="item-author">
+                            <div class="author-avatar">CS</div>
+                            <span>Carlos Sánchez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.1K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 8.3K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-380 bg-grad-5">
+                        <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b" alt="Arquitectura">
+                        <i class="fas fa-building"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(5)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(5)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(5)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Arquitectura Moderna</div>
+                        <div class="item-author">
+                            <div class="author-avatar">LM</div>
+                            <span>Laura Martínez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 980</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 4.7K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-340 bg-grad-6">
+                        <img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca" alt="Animales">
+                        <i class="fas fa-paw"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(6)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(6)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(6)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Naturaleza Animal</div>
+                        <div class="item-author">
+                            <div class="author-avatar">PH</div>
+                            <span>Pedro Hernández</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 3.4K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 12K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-290 bg-grad-7">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Moda">
+                        <i class="fas fa-tshirt"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(7)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(7)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(7)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Moda Contemporánea</div>
+                        <div class="item-author">
+                            <div class="author-avatar">SF</div>
+                            <span>Sofía Fernández</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.8K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 7.5K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-360 bg-grad-8">
+                        <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828" alt="Viajes">
+                        <i class="fas fa-plane"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(8)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(8)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(8)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Viajes y Aventuras</div>
+                        <div class="item-author">
+                            <div class="author-avatar">DR</div>
+                            <span>Diego Ramírez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.7K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 9.8K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-330 bg-grad-9">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d" alt="Música">
+                        <i class="fas fa-music"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(9)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(9)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(9)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Ritmos y Melodías</div>
+                        <div class="item-author">
+                            <div class="author-avatar">VT</div>
+                            <span>Valeria Torres</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.4K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 5.9K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="gallery-item">
+                    <div class="image-placeholder h-310 bg-grad-10">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="Tecnología">
+                        <i class="fas fa-laptop-code"></i>
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(10)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(10)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(10)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Tecnología Innovadora</div>
+                        <div class="item-author">
+                            <div class="author-avatar">RC</div>
+                            <span>Roberto Castro</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.3K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 10K</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Section -->
+        <aside class="right-section">
+            <div class="right-box" onclick="openFeature('trending')">
+                <i class="fas fa-fire"></i>
+                <div class="right-box-title">Tendencias</div>
+                <div class="right-box-desc">Lo más popular</div>
+            </div>
+            <div class="right-box" onclick="openFeature('saved')">
+                <i class="fas fa-bookmark"></i>
+                <div class="right-box-title">Guardados</div>
+                <div class="right-box-desc">Tus favoritos</div>
+            </div>
+            <div class="right-box" onclick="openFeature('collections')">
+                <i class="fas fa-folder"></i>
+                <div class="right-box-title">Colecciones</div>
+                <div class="right-box-desc">Organizados</div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="copyright">2025©COPYRIGHT</p>
+            <div class="footer-links">
+                <a href="#">Acerca de</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Subir Nueva Imagen</h2>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <p class="upload-text">Haz clic para seleccionar una imagen</p>
+                <p class="upload-subtext">JPG, PNG o GIF (máx. 10MB)</p>
+            </div>
+                <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeUploadModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="uploadImage()">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeCategory(event, category) {
+            event.preventDefault();
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            console.log('Categoría seleccionada:', category);
+        }
+
+        function activateSidebar(event, action) {
+            document.querySelectorAll('.sidebar-icon').forEach(icon => icon.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            console.log('Acción:', action);
+            if(action === 'home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if(action === 'explore') {
+                window.location.href = 'Explorar.html';
+            }
+        }
+
+        function performSearch(query) {
+            if(query) {
+                console.log('Buscando:', query);
+                alert('Resultados para: ' + query);
+            }
+        }
+
+        function openSettings() {
+            alert('⚙️ Configuración\n- Cambiar tema\n- Notificaciones\n- Privacidad\n- Cuenta');
+        }
+
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                console.log('Archivo seleccionado:', file.name);
+                alert('Archivo listo para subir: ' + file.name);
+            }
+        }
+
+        async function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('❌ Por favor selecciona una imagen primero');
+                return;
+            }
+
+            // Crear FormData para enviar el archivo
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('titulo', 'Nueva Imagen'); // Puedes agregar un campo para título si lo deseas
+            formData.append('descripcion', '');
+            formData.append('categoriaID', 1); // Categoría por defecto
+            formData.append('usuarioID', 1); // Usuario por defecto
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ ' + result.message);
+                    closeUploadModal();
+                    // Recargar la galería para mostrar la nueva imagen
+                    loadImagesFromDatabase();
+                } else {
+                    alert('❌ Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error al subir imagen:', error);
+                alert('❌ Error de conexión al subir la imagen');
+            }
+        }
+
+        function showNotifications() {
+            // Abrir la página de notificaciones en la misma pestaña
+            window.location.href = 'notificaciones.html';
+        }
+
+        function openChat() {
+            alert('💬 Mensajes\n\nBandeja de entrada\n- Sin mensajes nuevos');
+        }
+
+        function openProfile() {
+            // Verificar si el usuario ha iniciado sesión
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            
+            if (isLoggedIn === 'true') {
+                // Usuario con sesión activa - mostrar perfil
+                const userName = localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'Usuario';
+                const loginMethod = localStorage.getItem('loginMethod') || 'email';
+                
+                const profileMessage = '👤 Perfil de ' + userName + '\n\n' +
+                    '✅ Sesión activa (' + (loginMethod === 'google' ? 'Google' : 'Email') + ')\n\n' +
+                    '• Ver mis publicaciones\n' +
+                    '• Editar perfil\n' +
+                    '• Estadísticas\n' +
+                    '• Configuración\n\n' +
+                    '¿Deseas cerrar sesión?';
+                
+                if (confirm(profileMessage)) {
+                    // Cerrar sesión
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userPicture');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('loginMethod');
+                    sessionStorage.clear();
+                    
+                    alert('✅ Sesión cerrada exitosamente');
+                    window.location.reload();
+                }
+            } else {
+                // Usuario sin sesión - redirigir a login
+                if (confirm('🔐 Necesitas iniciar sesión para acceder a tu perfil.\n\n¿Deseas iniciar sesión ahora?')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+
+        function openFeature(feature) {
+            const messages = {
+                'trending': '🔥 Tendencias\n\nContenido más popular hoy:\n• Paisajes naturales\n• Arte digital\n• Fotografía urbana',
+                'saved': '📌 Guardados\n\nTus imágenes favoritas\n• 12 elementos guardados',
+                'collections': '📁 Colecciones\n\nOrganiza tu contenido:\n• Mis favoritos\n• Inspiración\n• Proyectos'
+            };
+            alert(messages[feature] || 'Función disponible próximamente');
+        }
+
+        // ==================== FUNCIONES CON BASE DE DATOS ====================
+        
+        // Cargar imágenes desde la base de datos al iniciar
+        async function loadImagesFromDatabase() {
+            try {
+                const response = await fetch('/api/gallery');
+                const result = await response.json();
+
+                if (result.success) {
+                    displayImagesFromDatabase(result.images);
+                } else {
+                    console.error('Error al cargar imágenes:', result.error);
+                    // Si hay error en la BD, mostrar mensaje pero no imágenes estáticas
+                    showErrorMessage('Error al cargar imágenes desde la base de datos');
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                // Mostrar mensaje de error en lugar de imágenes estáticas
+                showErrorMessage('No se puede conectar al servidor. Verifica que el servidor Flask esté ejecutándose.');
+            }
+        }
+
+        // Función para mostrar mensajes de error
+        function showErrorMessage(message) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = `
+                <div class="error-connection">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <h3 class="error-title">Error de Conexión</h3>
+                    <p>${message}</p>
+                    <button class="error-retry-btn" onclick="loadImagesFromDatabase()">
+                        <i class="fas fa-refresh"></i> Reintentar
+                    </button>
+                </div>
+            `;
+        }
+
+        // Mostrar imágenes desde la base de datos
+        function displayImagesFromDatabase(images) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = ''; // Limpiar galería existente
+            
+            images.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
+                // Usar clases predefinidas para alturas y degradados en vez de estilos inline
+                const gradientClasses = ['bg-grad-1','bg-grad-2','bg-grad-3','bg-grad-4','bg-grad-5','bg-grad-6','bg-grad-7','bg-grad-8','bg-grad-9','bg-grad-10'];
+                const heightClasses = ['h-280','h-290','h-300','h-310','h-320','h-330','h-340','h-350','h-360','h-380'];
+
+                const idx = Math.floor(Math.random() * gradientClasses.length);
+                const gradClass = gradientClasses[idx];
+                const heightClass = heightClasses[idx];
+
+                item.innerHTML = `
+                    <div class="image-placeholder ${heightClass} ${gradClass}">
+                        <img src="${image.ImagenURL}" alt="${image.Titulo}">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItemFromDatabase(${image.PublicacionID})"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(${image.PublicacionID})"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(${image.PublicacionID})"><i class="fas fa-bookmark"></i></button>
+                            <button class="overlay-btn btn-delete" onclick="deleteItem(${image.PublicacionID})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">${image.Titulo}</div>
+                        <div class="item-author">
+                            <div class="author-avatar">${image.Avatar}</div>
+                            <span>${image.NombreUsuario}</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> ${formatNumber(image.Likes)}</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> ${formatNumber(image.Vistas)}</div>
+                        </div>
+                    </div>
+                `;
+                
+                gallery.appendChild(item);
+            });
+        }
+
+        // Función para formatear números
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Función para dar like conectada a la base de datos
+        async function likeItemFromDatabase(publicacionID) {
+            try {
+                const response = await fetch('/api/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        publicacionID: publicacionID,
+                        usuarioID: 1 // Usuario por defecto
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Actualizar contador en la interfaz
+                    updateLikeCounter(publicacionID, result.newLikeCount);
+                    alert(result.message);
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                console.error('Error al dar like:', error);
+                alert('Error al procesar el like');
+            }
+        }
+
+        // Función para actualizar contador de likes
+        function updateLikeCounter(publicacionID, newCount) {
+            const item = document.querySelector(`[onclick*="likeItemFromDatabase(${publicacionID})"]`).closest('.gallery-item');
+            if (item) {
+                const likeElement = item.querySelector('.stat-item i.fa-heart').parentElement;
+                likeElement.innerHTML = `<i class="fas fa-heart"></i> ${formatNumber(newCount)}`;
+            }
+        }
+
+        // Funciones originales (mantener compatibilidad)
+        function likeItem(id) {
+            likeItemFromDatabase(id);
+        }
+
+        function shareItem(id) {
+            console.log('Compartir item:', id);
+            alert('🔗 Compartiendo publicación...');
+        }
+
+        async function saveItem(id) {
+            console.log('Guardar item:', id);
+            alert('📌 Guardado en tus favoritos');
+        }
+
+        // Función para eliminar publicación
+        async function deleteItem(publicacionID) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta publicación?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/delete/${publicacionID}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ ' + result.message);
+                    // Recargar la galería para actualizar la vista
+                    loadImagesFromDatabase();
+                } else {
+                    alert('❌ Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error al eliminar publicación:', error);
+                alert('❌ Error de conexión al eliminar la publicación');
+            }
+        }
+
+        // Cargar imágenes al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadImagesFromDatabase();
+            checkUserSession();
+        });
+
+        // Verificar sesión del usuario y actualizar UI
+        function checkUserSession() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            const userName = localStorage.getItem('userName');
+            const userPicture = localStorage.getItem('userPicture');
+            
+            if (isLoggedIn === 'true') {
+                // Usuario con sesión activa - actualizar icono de usuario
+                const userIcon = document.querySelector('.icon-user');
+                
+                if (userPicture) {
+                    // Mostrar foto de perfil si existe
+                    userIcon.style.backgroundImage = 'url(' + userPicture + ')';
+                    userIcon.style.backgroundSize = 'cover';
+                    userIcon.style.backgroundPosition = 'center';
+                    userIcon.innerHTML = '';
+                } else if (userName) {
+                    // Mostrar iniciales del nombre
+                    const initials = userName.split(' ').map(function(n) { return n[0]; }).join('').substring(0, 2).toUpperCase();
+                    userIcon.innerHTML = '<span class="user-initials">' + initials + '</span>';
+                }
+                
+                // Agregar indicador de sesión activa
+                userIcon.style.border = '3px solid #10b981';
+                userIcon.title = 'Sesión activa: ' + (userName || 'Usuario');
+                
+                console.log('✅ Sesión activa detectada:', userName || 'Usuario');
+            } else {
+                // Sin sesión - mostrar icono por defecto
+                const userIcon = document.querySelector('.icon-user');
+                userIcon.title = 'Iniciar sesión o crear cuenta';
+                console.log('ℹ️ No hay sesión activa');
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('uploadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUploadModal();
+            }
+        });
+    </script>
+</body>
+</html>

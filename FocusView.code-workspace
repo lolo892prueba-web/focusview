@@ -1,0 +1,54 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "python",
+        "python.terminal.activateEnvironment": true,
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "terminal.integrated.defaultProfile.windows": "PowerShell",
+        "workbench.startupEditor": "none",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "liveServer.settings.donotShowInfoMsg": true,
+        "liveServer.settings.port": 5001,
+        "liveServer.settings.disableHost": true,
+        "liveServer.settings.useLocalIp": false
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Auto Start FocusView",
+                "type": "shell",
+                "command": "AUTO_INICIAR_FLASK.bat",
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "new"
+                },
+                "runOptions": {
+                    "runOn": "folderOpen"
+                }
+            }
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.flake8",
+            "ritwickdey.liveserver",
+            "ms-vscode.powershell"
+        ]
+    }
+}
+
+
+
+

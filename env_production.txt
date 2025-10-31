@@ -1,0 +1,17 @@
+# Variables de entorno para producción
+# Copia este archivo como .env y configura tus valores
+
+# Base de datos
+DB_SERVER=tu-servidor-db
+DB_DATABASE=FocusViewDB
+DB_USERNAME=tu-usuario
+DB_PASSWORD=tu-password
+DB_DRIVER={ODBC Driver 17 for SQL Server}
+
+# Flask
+FLASK_ENV=production
+SECRET_KEY=tu-clave-secreta-muy-segura
+
+# Puerto (Railway lo configura automáticamente)
+PORT=5000
+

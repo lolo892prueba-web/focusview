@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - FocusView</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="redirect-to-port-5000.js"></script>
+    
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== HEADER (igual que index.html) ==================== */
+        header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: fadeInLeft 0.6s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .logo-circle {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #0000ff 0%, #2563eb 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgb(0, 81, 255);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-fallback {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .logo-circle:hover {
+            transform: rotate(360deg) scale(1.05);
+        }
+
+        .logo-text h1 {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            font-style: italic;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* ==================== LOGIN CONTAINER ==================== */
+        .login-main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            padding: 50px 40px;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* ==================== MENSAJE ==================== */
+        .message {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 2px solid #fca5a5;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            color: #059669;
+            border: 2px solid #6ee7b7;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        /* ==================== FORMULARIO ==================== */
+        .login-form {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        /* ==================== BOTONES ==================== */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-login.loading .spinner {
+            display: block;
+        }
+
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+
+        /* ==================== SEPARADOR ==================== */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-weight: 600;
+        }
+
+        /* ==================== BOTÓN GOOGLE ==================== */
+        #googleButtonContainer {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            color: #1a1a2e;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .btn-google:hover {
+            background-color: #f9fafb;
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-google:active {
+            transform: translateY(0);
+        }
+
+        .google-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .login-footer a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-footer a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .login-footer p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+            
+            .logo-text h1 {
+                font-size: 24px;
+            }
+            
+            .login-container {
+                padding: 40px 30px;
+            }
+            
+            .login-header h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+    <script src="redirect-to-port-5000.js"></script>
+</head>
+<body>
+    <!-- Header (igual que index.html) -->
+    <header>
+        <div class="logo-section">
+            <div class="logo-circle">
+                <img src="imagen_circular_recortada (1).png" alt="FocusView Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback" style="display: none;">F</div>
+            </div>
+            <div class="logo-text">
+                <h1>FocusView</h1>
+                <p>Max Inspirate y Empuja</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Login Area -->
+    <div class="login-main">
+        <div class="login-container">
+            <!-- Header -->
+            <div class="login-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a tu cuenta de FocusView</p>
+            </div>
+
+            <!-- Mensaje de estado -->
+            <div id="message" class="message"></div>
+
+            <!-- Botón de Google (se renderiza aquí si está configurado) -->
+            <div id="googleButtonContainer"></div>
+
+            <!-- Botón de Google personalizado (fallback) -->
+            <button class="btn-google" onclick="loginWithGoogle()" id="customGoogleBtn">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continuar con Google
+            </button>
+
+            <!-- Separador -->
+            <div class="divider">
+                <span>O inicia sesión con email</span>
+            </div>
+
+            <!-- Formulario de inicio de sesión -->
+            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo electrónico</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="tu@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Recordarme</label>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="btn-text">Iniciar Sesión</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <a href="#" onclick="forgotPassword(); return false;">¿Olvidaste tu contraseña?</a>
+                <p>¿No tienes cuenta? <a href="#" onclick="createAccount(); return false;">Regístrate</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURACIÓN DE GOOGLE ====================
+        // IMPORTANTE: Reemplaza con tu Client ID real de Google Cloud Console
+        // Instrucciones: https://console.cloud.google.com/
+        let GOOGLE_CLIENT_ID = null;
+
+        // Base de datos simulada de usuarios registrados
+        const registeredUsers = [
+            { email: 'admin@focusview.com', password: 'admin123', name: 'Administrador' },
+            { email: 'usuario@gmail.com', password: '123456', name: 'Usuario Demo' },
+            { email: 'test@test.com', password: 'test123', name: 'Usuario Test' }
+        ];
+
+        // ==================== INICIALIZAR GOOGLE SIGN-IN ====================
+    async function initializeGoogleSignIn() {
+                // Si aún no tenemos el client id, obtenerlo desde el servidor
+                if (!GOOGLE_CLIENT_ID) {
+                    try {
+                        const resp = await fetch('/api/config');
+                        const cfg = await resp.json();
+                        if (cfg && cfg.googleClientId) {
+                            GOOGLE_CLIENT_ID = cfg.googleClientId;
+                        }
+                    } catch (err) {
+                        console.error('No se pudo obtener configuración:', err);
+                    }
+                }
+
+                if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.indexOf('TU_CLIENT_ID') === -1) {
+                // Si tienes un Client ID real configurado
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleCallback,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                
+                // Renderizar el botón oficial de Google
+                google.accounts.id.renderButton(
+                    document.getElementById('googleButtonContainer'),
+                    { 
+                        theme: 'outline',
+                        size: 'large',
+                        width: 420,
+                        text: 'continue_with',
+                        shape: 'rectangular',
+                        logo_alignment: 'left'
+                    }
+                );
+                
+                // Ocultar el botón personalizado
+                document.getElementById('customGoogleBtn').style.display = 'none';
+                
+                console.log('✅ Google Sign-In inicializado correctamente');
+            } else {
+                console.log('ℹ️ Configura tu Client ID de Google para usar cuentas reales');
+            }
+        }
+
+        // Cargar Google Sign-In cuando la página esté lista
+        window.addEventListener('load', initializeGoogleSignIn);
+
+        // ==================== LOGIN CON GOOGLE ====================
+        function loginWithGoogle() {
+                if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.indexOf('TU_CLIENT_ID') === -1) {
+                // Modo real: usar API de Google
+                google.accounts.id.prompt();
+            } else {
+                // Modo demo: mostrar instrucciones
+                showMessage('⚠️ Para usar tu cuenta de Gmail real, configura el Client ID de Google. Revisa GUIA_GOOGLE_SIGNIN.md', 'error');
+                
+                // Simular login para pruebas
+                setTimeout(() => {
+                    const mockUser = {
+                        email: 'demo@gmail.com',
+                        name: 'Usuario Demo',
+                        picture: 'https://ui-avatars.com/api/?name=Demo+User&background=4285F4&color=fff'
+                    };
+                    
+                    localStorage.setItem('userEmail', mockUser.email);
+                    localStorage.setItem('userName', mockUser.name);
+                    localStorage.setItem('userPicture', mockUser.picture);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loginMethod', 'google');
+                    
+                    showMessage('✅ Modo demo activado', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }, 1000);
+            }
+        }
+
+        // Callback cuando Google Sign-In es exitoso
+        async function handleGoogleCallback(response) {
+            console.log('✅ Google Sign-In recibido (frontend)');
+
+            // Enviar token al backend para validación y creación de sesión
+            try {
+                const resp = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+
+                const result = await resp.json();
+
+                if (resp.ok && result.success) {
+                    const user = result.user;
+                    // Guardar información mínima en localStorage para el frontend
+                    localStorage.setItem('userEmail', user.email || '');
+                    localStorage.setItem('userName', user.name || '');
+                    localStorage.setItem('userPicture', user.picture || '');
+                    localStorage.setItem('userId', user.sub || '');
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loginMethod', 'google');
+
+                    showMessage('✅ ¡Bienvenido ' + (user.name || '') + '!', 'success');
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+                } else {
+                    console.error('Error validando token en backend:', result);
+                    showMessage('❌ No se pudo validar la sesión en el servidor', 'error');
+                }
+            } catch (err) {
+                console.error('Error enviando token al servidor:', err);
+                showMessage('❌ Error del servidor al validar sesión', 'error');
+            }
+        }
+
+        // Decodificar JWT token
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // ==================== LOGIN CON EMAIL ====================
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            if (!email || !validateEmail(email) || !password) {
+                showMessage('❌ Ingresa email y contraseña válidos', 'error');
+                return;
+            }
+
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.classList.add('loading');
+
+            try {
+                const resp = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const result = await resp.json();
+                if (resp.ok && result.success) {
+                    const user = result.user;
+                    const storage = remember ? localStorage : sessionStorage;
+                    storage.setItem('userEmail', user.email || '');
+                    storage.setItem('userName', user.name || '');
+                    storage.setItem('isLoggedIn', 'true');
+                    storage.setItem('loginMethod', 'email');
+
+                    showMessage('✅ ¡Bienvenido ' + (user.name || '') + '!', 'success');
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+                } else {
+                    showMessage('❌ ' + (result.error || 'Error de autenticación'), 'error');
+                    loginBtn.classList.remove('loading');
+                }
+            } catch (err) {
+                console.error(err);
+                showMessage('❌ Error del servidor al iniciar sesión', 'error');
+                loginBtn.classList.remove('loading');
+            }
+        }
+
+        // Validar email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Mostrar mensaje
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = 'message ' + type + ' show';
+            
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 5000);
+        }
+
+        // Olvidé contraseña
+        async function forgotPassword() {
+            const email = prompt('Ingresa tu correo electrónico:');
+            if (!email) return;
+            if (!validateEmail(email)) { showMessage('❌ Correo inválido', 'error'); return; }
+
+            try {
+                const resp = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email.toLowerCase() })
+                });
+                const result = await resp.json();
+                if (resp.ok && result.success) {
+                    if (result.resetUrl) {
+                        showMessage('✅ Enlace de recuperación generado (dev). Revisa consola o copia el link.', 'success');
+                        console.log('Reset URL (dev):', result.resetUrl);
+                        if (confirm('¿Abrir enlace de recuperación en una nueva pestaña?')) {
+                            window.open(result.resetUrl, '_blank');
+                        }
+                    } else {
+                        showMessage('✅ Si el correo existe, recibirás instrucciones.', 'success');
+                    }
+                } else {
+                    showMessage('❌ ' + (result.error || 'Error al solicitar recuperación'), 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showMessage('❌ Error del servidor al solicitar recuperación', 'error');
+            }
+        }
+
+        // Crear cuenta
+        async function createAccount() {
+            const email = prompt('Ingresa tu correo electrónico:');
+            if (!email) return;
+            if (!validateEmail(email)) { showMessage('❌ Correo inválido', 'error'); return; }
+
+            const password = prompt('Crea una contraseña (mínimo 6 caracteres):');
+            if (!password || password.length < 6) { showMessage('❌ Contraseña inválida', 'error'); return; }
+
+            const name = prompt('¿Cómo te llamas?') || '';
+
+            try {
+                const resp = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email.toLowerCase(), name, password })
+                });
+                const result = await resp.json();
+                if (resp.ok && result.success) {
+                    showMessage('✅ Cuenta creada correctamente. Inicia sesión.', 'success');
+                    document.getElementById('email').value = email;
+                } else {
+                    showMessage('❌ ' + (result.error || 'No se pudo crear cuenta'), 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showMessage('❌ Error del servidor al crear cuenta', 'error');
+            }
+        }
+
+        // Verificar sesión existente
+        window.addEventListener('load', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            
+            if (isLoggedIn === 'true') {
+                showMessage('Ya tienes una sesión activa. Redirigiendo...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

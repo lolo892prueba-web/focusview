@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Notificaciones - FocusView</title>
+    <link rel="stylesheet" href="notificaciones.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="notificaciones-body">
+    <header class="nv-header">
+        <i class="fas fa-bell" style="font-size:20px;opacity:0.95"></i>
+        <h1>Notificaciones</h1>
+    </header>
+
+    <main class="nv-container">
+        <div class="nv-card">
+            <div class="nv-actions">
+                <div style="font-weight:600">Últimas</div>
+                <div>
+                    <button class="btn-secondary" onclick="markAllRead()">Marcar todo como leído</button>
+                    <button class="btn-primary" onclick="refresh()" style="margin-left:8px">Actualizar</button>
+                </div>
+            </div>
+
+            <ul id="nv-list" class="nv-list"></ul>
+
+            <div id="nv-empty" class="empty" style="display:none">No tienes notificaciones nuevas</div>
+        </div>
+    </main>
+
+    <script>
+        async function loadNotifications(){
+            try{
+                const resp = await fetch('/api/notifications');
+                const data = await resp.json();
+                const list = document.getElementById('nv-list');
+                const empty = document.getElementById('nv-empty');
+                list.innerHTML = '';
+                if(!data.success || !data.notifications || data.notifications.length===0){
+                    empty.style.display = 'block';
+                    return;
+                }
+                empty.style.display = 'none';
+                data.notifications.forEach(n => {
+                    const li = document.createElement('li');
+                    li.className = 'nv-item';
+                    const avatar = document.createElement('div'); avatar.className='nv-avatar'; avatar.textContent = (n.origin_user_id ? 'U' : 'N');
+                    const content = document.createElement('div'); content.className='nv-content';
+                    const title = document.createElement('div'); title.className='nv-title'; title.textContent = n.message;
+                    const meta = document.createElement('div'); meta.className='nv-meta'; meta.textContent = n.created_at;
+                    content.appendChild(title); content.appendChild(meta);
+                    li.appendChild(avatar); li.appendChild(content);
+                    li.onclick = ()=>{ markReadAndOpen(n); };
+                    list.appendChild(li);
+                });
+            }catch(err){
+                console.error('Error cargando notificaciones', err);
+            }
+        }
+
+        async function markReadAndOpen(n){
+            try{
+                await fetch('/api/notifications/mark-read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({notificationId: n.id})});
+                // Si hay una publicación asociada, abrirla
+                if(n.publicacion_id){
+                    window.location.href = `Explorar.html#post-${n.publicacion_id}`;
+                } else {
+                    // recargar para actualizar estado
+                    loadNotifications();
+                }
+            }catch(e){console.error(e)}
+        }
+
+        function markAllRead(){
+            // marcar todas como leídas (petición simplificada)
+            fetch('/api/notifications', {method:'GET'}).then(r=>r.json()).then(d=>{
+                if(d.success && d.notifications){
+                    d.notifications.forEach(n=>{ fetch('/api/notifications/mark-read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({notificationId: n.id})}) });
+                    document.getElementById('nv-list').innerHTML='';
+                    document.getElementById('nv-empty').style.display='block';
+                }
+            })
+        }
+        function refresh(){
+            // En este demo solo recarga la página. En producción pediría /api/notifications
+            loadNotifications();
+        }
+        // Soporte para abrir desde otras páginas con foco
+        window.addEventListener('load', ()=>{
+            loadNotifications();
+        });
+    </script>
+</body>
+</html>

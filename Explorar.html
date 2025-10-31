@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusView - Explora e Inspírate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="redirect-to-port-5000.js"></script>
+    <link rel="stylesheet" href="Explorar.css">
+    <script src="redirect-to-port-5000.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-circle">
+            <img src="imagen_circular_recortada (1).png" alt="FocusView Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="logo-fallback" style="display: none;">F</div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar inspiración..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                <i class="fas fa-microphone mic-icon" onclick="voiceSearch()"></i>
+            </div>
+        </div>
+
+        <div class="header-icons">
+            <div class="header-icon bell-icon" onclick="loadImagesFromDatabase()" title="Recargar galería">
+                <i class="fas fa-sync-alt"></i>
+            </div>
+            <div class="header-icon bell-icon" onclick="showNotifications()">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="header-icon settings-icon" onclick="openSettings()">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <a href="#" class="active" onclick="changeCategory(event, 'inicio')">INICIO</a>
+        <a href="#" onclick="changeCategory(event, 'tecnologia')">TECNOLOGÍA</a>
+        <a href="#" onclick="changeCategory(event, 'paisajes')">PAISAJES</a>
+        <a href="#" onclick="changeCategory(event, 'animales')">ANIMALES</a>
+        <a href="#" onclick="changeCategory(event, 'arte')">ARTE</a>
+        <a href="#" onclick="changeCategory(event, 'fotografia')">FOTOGRAFÍA</a>
+        <a href="#" onclick="changeCategory(event, 'arquitectura')">ARQUITECTURA</a>
+        <a href="#" onclick="changeCategory(event, 'diseño')">DISEÑO</a>
+        <a href="#" onclick="changeCategory(event, 'naturaleza')">NATURALEZA</a>
+        <a href="#" onclick="changeCategory(event, 'viajes')">VIAJES</a>
+    </nav>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-icon active" onclick="goHome()">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="sidebar-icon" onclick="openSearch()">
+                <i class="fas fa-compass"></i>
+            </div>
+            <div class="sidebar-icon" onclick="goToUpload()">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="sidebar-icon" onclick="openMessages()">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="user-icon-sidebar" onclick="openProfile()">
+                <i class="fas fa-user"></i>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <h1 class="explore-title">EXPLORA E INSPÍRATE</h1>
+
+            <!-- Category Filters -->
+            <div class="category-filters">
+                <button class="category-btn active" onclick="filterByCategory('all')">
+                    <i class="fas fa-th"></i> Todas
+                </button>
+                <button class="category-btn" onclick="filterByCategory('paisajes')">
+                    <i class="fas fa-mountain"></i> Paisajes
+                </button>
+                <button class="category-btn" onclick="filterByCategory('animales')">
+                    <i class="fas fa-paw"></i> Animales
+                </button>
+                <button class="category-btn" onclick="filterByCategory('arte')">
+                    <i class="fas fa-palette"></i> Arte
+                </button>
+                <button class="category-btn" onclick="filterByCategory('comida')">
+                    <i class="fas fa-utensils"></i> Comida
+                </button>
+                <button class="category-btn" onclick="filterByCategory('arquitectura')">
+                    <i class="fas fa-building"></i> Arquitectura
+                </button>
+                <button class="category-btn" onclick="filterByCategory('moda')">
+                    <i class="fas fa-tshirt"></i> Moda
+                </button>
+                <button class="category-btn" onclick="filterByCategory('viajes')">
+                    <i class="fas fa-plane"></i> Viajes
+                </button>
+                <button class="category-btn" onclick="filterByCategory('musica')">
+                    <i class="fas fa-music"></i> Música
+                </button>
+                <button class="category-btn" onclick="filterByCategory('tecnologia')">
+                    <i class="fas fa-laptop"></i> Tecnología
+                </button>
+            </div>
+
+            <div class="gallery-masonry" id="gallery-masonry">
+                <!-- Item 1 -->
+                <div class="gallery-item" data-category="paisajes">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Paisaje" style="height: 300px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(1)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(1)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(1)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Montañas al Atardecer</div>
+                        <div class="item-author">
+                            <div class="author-avatar">MR</div>
+                            <span>María Rodríguez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.2K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 5.4K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="gallery-item" data-category="paisajes">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1477346611705-65d1883cee1e" alt="Paisaje" style="height: 400px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(2)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(2)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(2)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Serenidad Natural</div>
+                        <div class="item-author">
+                            <div class="author-avatar">JG</div>
+                            <span>Juan García</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 892</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 3.1K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="gallery-item" data-category="arte">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809" alt="Arte" style="height: 250px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(3)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(3)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(3)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Arte Abstracto</div>
+                        <div class="item-author">
+                            <div class="author-avatar">AL</div>
+                            <span>Ana López</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.5K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 6.2K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="gallery-item" data-category="comida">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="Comida" style="height: 350px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(4)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(4)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(4)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Gastronomía Exquisita</div>
+                        <div class="item-author">
+                            <div class="author-avatar">CS</div>
+                            <span>Carlos Sánchez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.1K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 8.3K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="gallery-item" data-category="arquitectura">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b" alt="Arquitectura" style="height: 280px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(5)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(5)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(5)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Arquitectura Moderna</div>
+                        <div class="item-author">
+                            <div class="author-avatar">LM</div>
+                            <span>Laura Martínez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 980</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 4.7K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="gallery-item" data-category="animales">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca" alt="Animales" style="height: 320px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(6)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(6)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(6)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Vida Salvaje</div>
+                        <div class="item-author">
+                            <div class="author-avatar">PH</div>
+                            <span>Pedro Hernández</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 3.4K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 12K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="gallery-item" data-category="moda">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Moda" style="height: 380px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(7)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(7)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(7)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Estilo Urbano</div>
+                        <div class="item-author">
+                            <div class="author-avatar">SF</div>
+                            <span>Sofía Fernández</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.8K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 7.5K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="gallery-item" data-category="viajes">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828" alt="Viajes" style="height: 290px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(8)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(8)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(8)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Aventuras Épicas</div>
+                        <div class="item-author">
+                            <div class="author-avatar">DR</div>
+                            <span>Diego Ramírez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.7K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 9.8K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="gallery-item" data-category="musica">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d" alt="Música" style="height: 340px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(9)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(9)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(9)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Ritmo y Melodía</div>
+                        <div class="item-author">
+                            <div class="author-avatar">VT</div>
+                            <span>Valeria Torres</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 1.4K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 5.9K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="gallery-item" data-category="tecnologia">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="Tecnología" style="height: 310px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(10)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(10)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(10)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Innovación Tech</div>
+                        <div class="item-author">
+                            <div class="author-avatar">RC</div>
+                            <span>Roberto Castro</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.3K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 10K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 11 - Animales -->
+                <div class="gallery-item" data-category="animales">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e" alt="Animales" style="height: 280px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(11)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(11)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(11)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">León Majestuoso</div>
+                        <div class="item-author">
+                            <div class="author-avatar">AC</div>
+                            <span>Ana Castillo</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 4.2K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 15K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 12 - Animales -->
+                <div class="gallery-item" data-category="animales">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa" alt="Animales" style="height: 350px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(12)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(12)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(12)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Elefante Salvaje</div>
+                        <div class="item-author">
+                            <div class="author-avatar">MP</div>
+                            <span>Miguel Pérez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 3.8K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 13K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 13 - Animales -->
+                <div class="gallery-item" data-category="animales">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1574144611937-0df059b5ef3e" alt="Animales" style="height: 320px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(13)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(13)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(13)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Mariposa Colorida</div>
+                        <div class="item-author">
+                            <div class="author-avatar">LR</div>
+                            <span>Luis Ramírez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 2.9K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 11K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 14 - Animales -->
+                <div class="gallery-item" data-category="animales">
+                    <div class="gallery-item-image">
+                        <img src="https://images.unsplash.com/photo-1504006833117-8886a355efbf" alt="Animales" style="height: 290px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="likeItem(14)"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="shareItem(14)"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="saveItem(14)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title">Pingüinos Adorables</div>
+                        <div class="item-author">
+                            <div class="author-avatar">EG</div>
+                            <span>Elena Gómez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 5.1K</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 18K</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="feed-button" onclick="goToFeed()">IR AL FEED DE INICIO</button>
+        </main>
+
+        <!-- Right Section -->
+        <aside class="right-section">
+            <div class="right-box" onclick="openFeature('trending')">
+                <i class="fas fa-fire"></i>
+                <div class="right-box-title">Tendencias</div>
+                <div class="right-box-desc">Lo más popular</div>
+            </div>
+            <div class="right-box" onclick="openFeature('saved')">
+                <i class="fas fa-bookmark"></i>
+                <div class="right-box-title">Guardados</div>
+                <div class="right-box-desc">Tus favoritos</div>
+            </div>
+            <div class="right-box" onclick="openFeature('collections')">
+                <i class="fas fa-folder"></i>
+                <div class="right-box-title">Colecciones</div>
+                <div class="right-box-desc">Organizados</div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Subir Nueva Imagen</h2>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <p class="upload-text">Haz clic para seleccionar una imagen</p>
+                <p class="upload-subtext">JPG, PNG o GIF (máx. 10MB)</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+            
+            <div class="upload-form" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label for="imageTitle" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Título:</label>
+                    <input type="text" id="imageTitle" placeholder="Ingresa un título para tu imagen" style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 16px; transition: border-color 0.3s ease;">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="imageDescription" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Descripción (opcional):</label>
+                    <textarea id="imageDescription" placeholder="Describe tu imagen..." style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 16px; height: 80px; resize: vertical; transition: border-color 0.3s ease;"></textarea>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeUploadModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="uploadImage()">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="copyright">2025©COPYRIGHT</p>
+            <div class="footer-links">
+                <a href="#">Acerca de</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function performSearch(query) {
+            if(query) {
+                console.log('Buscando:', query);
+                alert('🔍 Buscando: ' + query);
+            }
+        }
+
+        function voiceSearch() {
+            alert('🎤 Búsqueda por voz activada');
+        }
+
+        function showNotifications() {
+            // Abrir página de notificaciones
+            window.location.href = 'notificaciones.html';
+        }
+
+        function openSettings() {
+            alert('⚙️ Configuración\n\n• Perfil\n• Privacidad\n• Notificaciones\n• Tema');
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function changeCategory(event, category) {
+            event.preventDefault();
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            console.log('Categoría seleccionada:', category);
+            
+            // Si es la categoría de animales, también activar el filtro de animales
+            if (category === 'animales') {
+                filterByCategory('animales');
+            } else {
+                // Filtrar por la categoría seleccionada
+                filterByCategory(category);
+            }
+        }
+
+        function openSearch() {
+            alert('🧭 Explorar tendencias');
+        }
+
+        function goToUpload() {
+            // Abrir modal de upload directamente
+            openUploadModal();
+        }
+
+        function openMessages() {
+            alert('✉️ Mensajes\n\nBandeja de entrada vacía');
+        }
+
+        function openProfile() {
+            alert('👤 Perfil de usuario\n\n• Mis publicaciones\n• Seguidores\n• Configuración');
+        }
+
+        function likeItem(id) {
+            console.log('Like en item:', id);
+            likeItemFromDatabase(id);
+        }
+
+        function shareItem(id) {
+            console.log('Compartir item:', id);
+            
+            // Obtener URL actual
+            const currentUrl = window.location.href;
+            const imageUrl = `${currentUrl.split('/')[0]}//${currentUrl.split('/')[2]}`;
+            
+            // Crear texto para compartir
+            const shareText = `¡Mira esta increíble imagen en FocusView! ${imageUrl}`;
+            
+            // Intentar usar Web Share API si está disponible
+            if (navigator.share) {
+                navigator.share({
+                    title: 'FocusView - Imagen Compartida',
+                    text: shareText,
+                    url: currentUrl
+                }).then(() => {
+                    console.log('Compartido exitosamente');
+                }).catch((error) => {
+                    console.log('Error al compartir:', error);
+                    fallbackShare(shareText);
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        function fallbackShare(text) {
+            // Copiar al portapapeles
+            navigator.clipboard.writeText(text).then(() => {
+                alert('🔗 ¡Enlace copiado al portapapeles!\n\nPuedes pegarlo en cualquier red social o mensaje.');
+            }).catch(() => {
+                // Fallback para navegadores más antiguos
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('🔗 ¡Enlace copiado al portapapeles!');
+            });
+        }
+
+        function saveItem(id) {
+            console.log('Guardar item:', id);
+            
+            // Verificar si el usuario está logueado
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            if (isLoggedIn !== 'true') {
+                if (confirm('Necesitas iniciar sesión para guardar imágenes. ¿Deseas iniciar sesión ahora?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            // Simular guardado (aquí podrías hacer una llamada a la API)
+            try {
+                // Obtener información de la imagen
+                const item = document.querySelector(`[onclick*="saveItem(${id})"]`).closest('.gallery-item');
+                const title = item.querySelector('.item-title').textContent;
+                
+                // Guardar en localStorage como favorito local
+                let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                const favoriteItem = {
+                    id: id,
+                    title: title,
+                    savedAt: new Date().toISOString()
+                };
+                
+                // Verificar si ya está guardado
+                const existingIndex = favorites.findIndex(fav => fav.id === id);
+                if (existingIndex === -1) {
+                    favorites.push(favoriteItem);
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    alert('📌 ¡Imagen guardada en tus favoritos!');
+                } else {
+                    alert('📌 Esta imagen ya está en tus favoritos');
+                }
+            } catch (error) {
+                console.error('Error al guardar:', error);
+                alert('❌ Error al guardar la imagen');
+            }
+        }
+
+        function goToFeed() {
+            alert('🏠 Redirigiendo al feed de inicio...');
+        }
+
+        // Función para descargar imágenes
+        function downloadImage(imageUrl) {
+            try {
+                // Extraer el nombre del archivo de la URL
+                const filename = imageUrl.split('/').pop();
+                
+                // Crear enlace de descarga
+                const downloadUrl = `/download/${filename}`;
+                
+                // Crear elemento temporal para descarga
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                link.target = '_blank';
+                
+                // Agregar al DOM, hacer clic y remover
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log('Descargando imagen:', filename);
+            } catch (error) {
+                console.error('Error al descargar imagen:', error);
+                alert('❌ Error al descargar la imagen');
+            }
+        }
+
+        // Función para visualizar imagen en pantalla completa
+        function viewImageFullscreen(imageUrl, title) {
+            // Crear modal de visualización
+            const modal = document.createElement('div');
+            modal.className = 'image-viewer-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            `;
+
+            const imageContainer = document.createElement('div');
+            imageContainer.style.cssText = `
+                max-width: 80%;
+                max-height: 80%;
+                position: relative;
+                text-align: center;
+            `;
+
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.cssText = `
+                max-width: 70vw;
+                max-height: 60vh;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+
+            const titleElement = document.createElement('h3');
+            titleElement.textContent = title || 'Imagen';
+            titleElement.style.cssText = `
+                color: white;
+                margin: 15px 0;
+                font-size: 18px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+                max-width: 70vw;
+                word-wrap: break-word;
+            `;
+
+            const controls = document.createElement('div');
+            controls.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                display: flex;
+                gap: 10px;
+            `;
+
+            const downloadBtn = document.createElement('button');
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+            downloadBtn.style.cssText = `
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                padding: 10px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 18px;
+                backdrop-filter: blur(10px);
+            `;
+            downloadBtn.onclick = (e) => {
+                e.stopPropagation();
+                downloadImage(imageUrl);
+            };
+
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.style.cssText = `
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                padding: 10px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 18px;
+                backdrop-filter: blur(10px);
+            `;
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                document.body.removeChild(modal);
+            };
+
+            // Ensamblar modal
+            controls.appendChild(downloadBtn);
+            controls.appendChild(closeBtn);
+            imageContainer.appendChild(controls);
+            imageContainer.appendChild(img);
+            imageContainer.appendChild(titleElement);
+            modal.appendChild(imageContainer);
+
+            // Cerrar al hacer clic fuera de la imagen
+            modal.onclick = () => {
+                document.body.removeChild(modal);
+            };
+
+            // Cerrar con tecla ESC
+            const handleKeyPress = (e) => {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(modal);
+                    document.removeEventListener('keydown', handleKeyPress);
+                }
+            };
+            document.addEventListener('keydown', handleKeyPress);
+
+            // Agregar al DOM
+            document.body.appendChild(modal);
+        }
+
+        function openFeature(feature) {
+            const messages = {
+                'trending': '🔥 Tendencias\n\nContenido más popular hoy:\n• Paisajes naturales\n• Arte digital\n• Fotografía urbana',
+                'saved': '📌 Guardados\n\nTus imágenes favoritas\n• 12 elementos guardados',
+                'collections': '📁 Colecciones\n\nOrganiza tu contenido:\n• Mis favoritos\n• Inspiración\n• Proyectos'
+            };
+            alert(messages[feature] || 'Función disponible próximamente');
+        }
+
+        // ==================== CATEGORY FILTERING ====================
+        function filterByCategory(category) {
+            // Actualizar botones activos de los filtros de categoría
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Actualizar navegación superior
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            
+            // Activar el botón correspondiente en los filtros de categoría
+            const categoryBtn = document.querySelector(`[onclick*="'${category}'"]`);
+            if (categoryBtn) {
+                categoryBtn.classList.add('active');
+            }
+            
+            // Activar el enlace correspondiente en la navegación
+            const navLink = document.querySelector(`[onclick*="'${category}'"]`);
+            if (navLink && navLink.tagName === 'A') {
+                navLink.classList.add('active');
+            }
+
+            // Filtrar elementos de la galería
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            galleryItems.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                    item.style.animation = 'fadeIn 0.5s ease-in-out';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Si es la categoría de animales, mostrar opción para ir a página específica
+            if (category === 'animales') {
+                setTimeout(() => {
+                    showAnimalPageOption();
+                }, 500);
+            }
+        }
+
+        // ==================== ANIMAL PAGE OPTION ====================
+        function showAnimalPageOption() {
+            const animalItems = document.querySelectorAll('[data-category="animales"]');
+            if (animalItems.length > 0) {
+                // Crear botón flotante para ir a página de animales
+                const floatingBtn = document.createElement('button');
+                floatingBtn.innerHTML = '<i class="fas fa-paw"></i> Ver Todos los Animales';
+                floatingBtn.className = 'floating-category-btn';
+                floatingBtn.onclick = () => openAnimalPage();
+                
+                // Agregar estilos al botón flotante
+                floatingBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 100px;
+                    right: 30px;
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    color: white;
+                    border: none;
+                    padding: 15px 25px;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    font-size: 14px;
+                    cursor: pointer;
+                    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+                    transition: all 0.3s ease;
+                    z-index: 1000;
+                    animation: bounceIn 0.6s ease-out;
+                `;
+                
+                // Efecto hover
+                floatingBtn.addEventListener('mouseenter', () => {
+                    floatingBtn.style.transform = 'translateY(-3px) scale(1.05)';
+                    floatingBtn.style.boxShadow = '0 12px 35px rgba(37, 99, 235, 0.6)';
+                });
+                
+                floatingBtn.addEventListener('mouseleave', () => {
+                    floatingBtn.style.transform = 'translateY(0) scale(1)';
+                    floatingBtn.style.boxShadow = '0 8px 25px rgba(37, 99, 235, 0.4)';
+                });
+                
+                document.body.appendChild(floatingBtn);
+                
+                // Remover botón después de 10 segundos
+                setTimeout(() => {
+                    if (floatingBtn.parentNode) {
+                        floatingBtn.remove();
+                    }
+                }, 10000);
+            }
+        }
+
+        // ==================== OPEN ANIMAL PAGE ====================
+        function openAnimalPage() {
+            // Preguntar al usuario qué opción prefiere
+            const choice = confirm('¿Cómo quieres ver los animales?\n\n• Aceptar: Página completa de animales\n• Cancelar: Ventana emergente');
+            
+            if (choice) {
+                // Abrir página dedicada de animales
+                window.open('animales.html', '_blank');
+            } else {
+                // Crear ventana modal con galería específica de animales
+                openAnimalModal();
+            }
+        }
+
+        function openAnimalModal() {
+            const modal = document.createElement('div');
+            modal.className = 'animal-modal';
+            modal.innerHTML = `
+                <div class="modal-overlay" onclick="closeAnimalPage()">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <h2><i class="fas fa-paw"></i> GALERÍA DE ANIMALES</h2>
+                            <button class="close-btn" onclick="closeAnimalPage()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="animal-gallery">
+                            ${generateAnimalGallery()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar estilos CSS para el modal
+            const style = document.createElement('style');
+            style.textContent = `
+                .animal-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 2000;
+                    animation: fadeIn 0.3s ease-out;
+                }
+                
+                .modal-overlay {
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                }
+                
+                .modal-content {
+                    background: white;
+                    border-radius: 20px;
+                    max-width: 1200px;
+                    width: 100%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                }
+                
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 25px 30px;
+                    border-bottom: 2px solid #e9ecef;
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    color: white;
+                    border-radius: 20px 20px 0 0;
+                }
+                
+                .modal-header h2 {
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+                
+                .close-btn {
+                    background: rgba(255,255,255,0.2);
+                    border: none;
+                    color: white;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    font-size: 18px;
+                    transition: all 0.3s ease;
+                }
+                
+                .close-btn:hover {
+                    background: rgba(255,255,255,0.3);
+                    transform: scale(1.1);
+                }
+                
+                .animal-gallery {
+                    padding: 30px;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 25px;
+                }
+                
+                .animal-card {
+                    background: white;
+                    border-radius: 15px;
+                    overflow: hidden;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                }
+                
+                .animal-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+                }
+                
+                .animal-card img {
+                    width: 100%;
+                    height: 250px;
+                    object-fit: cover;
+                }
+                
+                .animal-card-info {
+                    padding: 20px;
+                }
+                
+                .animal-card-title {
+                    font-weight: 700;
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                    color: #1a1a2e;
+                }
+                
+                .animal-card-author {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 14px;
+                    color: #6b7280;
+                }
+                
+                .animal-card-author .avatar {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                @keyframes bounceIn {
+                    0% { opacity: 0; transform: scale(0.3); }
+                    50% { opacity: 1; transform: scale(1.05); }
+                    70% { transform: scale(0.9); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            document.body.appendChild(modal);
+            
+            // Prevenir scroll del body
+            document.body.style.overflow = 'hidden';
+        }
+
+        function generateAnimalGallery() {
+            const animals = [
+                {
+                    title: "León Majestuoso",
+                    author: "Ana Castillo",
+                    avatar: "AC",
+                    image: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+                    likes: "4.2K",
+                    views: "15K"
+                },
+                {
+                    title: "Vida Salvaje",
+                    author: "Pedro Hernández",
+                    avatar: "PH",
+                    image: "https://images.unsplash.com/photo-1425082661705-1834bfd09dca",
+                    likes: "3.4K",
+                    views: "12K"
+                },
+                {
+                    title: "Elefante Salvaje",
+                    author: "Miguel Pérez",
+                    avatar: "MP",
+                    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa",
+                    likes: "3.8K",
+                    views: "13K"
+                },
+                {
+                    title: "Mariposa Colorida",
+                    author: "Luis Ramírez",
+                    avatar: "LR",
+                    image: "https://images.unsplash.com/photo-1574144611937-0df059b5ef3e",
+                    likes: "2.9K",
+                    views: "11K"
+                },
+                {
+                    title: "Pingüinos Adorables",
+                    author: "Elena Gómez",
+                    avatar: "EG",
+                    image: "https://images.unsplash.com/photo-1504006833117-8886a355efbf",
+                    likes: "5.1K",
+                    views: "18K"
+                },
+                {
+                    title: "Tigre en la Selva",
+                    author: "Carlos Vega",
+                    avatar: "CV",
+                    image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5",
+                    likes: "4.7K",
+                    views: "16K"
+                },
+                {
+                    title: "Delfín Juguetón",
+                    author: "Isabel Ruiz",
+                    avatar: "IR",
+                    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5",
+                    likes: "3.2K",
+                    views: "14K"
+                },
+                {
+                    title: "Águila en Vuelo",
+                    author: "Fernando Torres",
+                    avatar: "FT",
+                    image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256",
+                    likes: "4.5K",
+                    views: "17K"
+                }
+            ];
+            
+            return animals.map(animal => `
+                <div class="animal-card" onclick="viewAnimalDetail('${animal.title}')">
+                    <img src="${animal.image}" alt="${animal.title}">
+                    <div class="animal-card-info">
+                        <div class="animal-card-title">${animal.title}</div>
+                        <div class="animal-card-author">
+                            <div class="avatar">${animal.avatar}</div>
+                            <span>${animal.author}</span>
+                        </div>
+                        <div class="item-stats" style="margin-top: 10px;">
+                            <div class="stat-item"><i class="fas fa-heart"></i> ${animal.likes}</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> ${animal.views}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function closeAnimalPage() {
+            const modal = document.querySelector('.animal-modal');
+            if (modal) {
+                modal.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    modal.remove();
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+
+        function viewAnimalDetail(title) {
+            alert(`🦁 Detalle de: ${title}\n\nAquí podrías mostrar más información sobre este animal, como su hábitat, características, etc.`);
+        }
+
+        // ==================== UPLOAD FUNCTIONS ====================
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            
+            // Resetear el área de upload
+            const uploadArea = document.querySelector('.upload-area');
+            uploadArea.innerHTML = `
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <p class="upload-text">Haz clic para seleccionar una imagen</p>
+                <p class="upload-subtext">JPG, PNG o GIF (máx. 10MB)</p>
+            `;
+            
+            // Limpiar el archivo seleccionado
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            
+            // Limpiar campos del formulario
+            document.getElementById('imageTitle').value = '';
+            document.getElementById('imageDescription').value = '';
+        }
+
+        let selectedFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                console.log('Archivo seleccionado:', file.name);
+                
+                // Crear vista previa de la imagen
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadArea = document.querySelector('.upload-area');
+                    uploadArea.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <img src="${e.target.result}" style="max-width: 200px; max-height: 150px; border-radius: 10px; object-fit: cover;">
+                        </div>
+                        <div class="upload-text">${file.name}</div>
+                        <div class="upload-subtext">Archivo listo para publicar</div>
+                        <button class="btn btn-secondary" style="margin-top: 10px;" onclick="document.getElementById('fileInput').click()">
+                            Cambiar imagen
+                        </button>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ==================== FUNCIONES CON BASE DE DATOS ====================
+        
+        // Cargar imágenes desde la base de datos
+        async function loadImagesFromDatabase(categoria = null) {
+            try {
+                console.log('Cargando imágenes desde la base de datos en Explorar...');
+                const url = categoria && categoria !== 'all' ? `/api/explore/${categoria}` : '/api/gallery';
+                const response = await fetch(url);
+                console.log('Respuesta recibida en Explorar:', response.status);
+                
+                const result = await response.json();
+                console.log('Datos recibidos en Explorar:', result);
+                
+                if (result.success && result.images && result.images.length > 0) {
+                    console.log('Éxito al cargar imágenes en Explorar:', result.images.length);
+                    displayImagesFromDatabase(result.images);
+                } else {
+                    console.log('No hay imágenes en la base de datos en Explorar');
+                    showEmptyGalleryExplorar();
+                }
+            } catch (error) {
+                console.error('Error de conexión en Explorar:', error);
+                console.log('No se pueden cargar imágenes de la base de datos en Explorar');
+                showEmptyGalleryExplorar();
+            }
+        }
+
+        // Mostrar galería vacía cuando no hay imágenes en la base de datos en Explorar
+        function showEmptyGalleryExplorar() {
+            const gallery = document.getElementById('gallery-masonry');
+            if (!gallery) return;
+            
+            gallery.innerHTML = `
+                <div style="text-align: center; padding: 50px; color: #666; font-size: 18px; grid-column: 1 / -1;">
+                    <i class="fas fa-images" style="font-size: 48px; margin-bottom: 20px; color: #ddd;"></i>
+                    <h3>No hay imágenes disponibles</h3>
+                    <p>Sube tu primera imagen para comenzar a llenar tu galería</p>
+                    <button onclick="openUploadModal()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; margin-top: 20px;">
+                        <i class="fas fa-upload"></i> Subir Imagen
+                    </button>
+                </div>
+            `;
+        }
+
+        // Mostrar imágenes estáticas como respaldo en Explorar
+        function showStaticImagesExplorar() {
+            const gallery = document.getElementById('gallery-masonry');
+            if (!gallery) {
+                console.error('No se encontró el elemento gallery-masonry');
+                return;
+            }
+            
+            console.log('Mostrando imágenes estáticas en Explorar...');
+            
+            // Solo limpiar si está vacío
+            if (gallery.children.length === 0) {
+                gallery.innerHTML = `
+                    <div class="gallery-item" data-category="paisajes">
+                    <div class="gallery-item-image">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Paisaje" style="height: 300px; object-fit: cover;">
+                        <div class="image-overlay">
+                                <button class="overlay-btn" onclick="likeItem(1)"><i class="fas fa-heart"></i></button>
+                                <button class="overlay-btn" onclick="shareItem(1)"><i class="fas fa-share-alt"></i></button>
+                                <button class="overlay-btn" onclick="downloadImage('https://images.unsplash.com/photo-1506905925346-21bda4d32df4')"><i class="fas fa-download"></i></button>
+                                <button class="overlay-btn" onclick="saveItem(1)"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                            <div class="item-title">Paisaje Montañoso</div>
+                        <div class="item-author">
+                                <div class="author-avatar">MR</div>
+                                <span>María Rodríguez</span>
+                        </div>
+                        <div class="item-stats">
+                                <div class="stat-item"><i class="fas fa-heart"></i> 1.2K</div>
+                                <div class="stat-item"><i class="fas fa-eye"></i> 5.4K</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Función simple para mostrar imágenes directamente en Explorar
+        function showImagesDirectlyExplorar() {
+            const gallery = document.getElementById('gallery-masonry');
+            if (!gallery) {
+                console.error('No se encontró el elemento gallery-masonry');
+                return;
+            }
+            
+            console.log('Mostrando imágenes directamente en Explorar...');
+            
+            // NO limpiar galería si ya tiene contenido
+            if (gallery.children.length > 0) {
+                console.log('La galería ya tiene contenido, no se limpia');
+                return;
+            }
+            
+            // Agregar imágenes directamente
+            gallery.innerHTML = `
+                <div class="gallery-item" data-category="anime">
+                    <div class="gallery-item-image" style="cursor: pointer;" onclick="viewImageFullscreen('/uploads/20251010_162426_personaje-de-estilo-anime-con-fuego-y-llamas.jpg', 'Personaje Anime con Fuego')">
+                        <img src="/uploads/20251010_162426_personaje-de-estilo-anime-con-fuego-y-llamas.jpg" alt="Personaje Anime" style="height: 300px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="event.stopPropagation(); likeItemFromDatabase(1)" title="Dar like"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); shareItem(1)" title="Compartir"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); downloadImage('/uploads/20251010_162426_personaje-de-estilo-anime-con-fuego-y-llamas.jpg')" title="Descargar"><i class="fas fa-download"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); saveItem(1)" title="Guardar"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title" onclick="viewImageFullscreen('/uploads/20251010_162426_personaje-de-estilo-anime-con-fuego-y-llamas.jpg', 'Personaje Anime con Fuego')" style="cursor: pointer;">Personaje Anime con Fuego</div>
+                        <div class="item-author">
+                            <div class="author-avatar">VR</div>
+                            <span>Victor Rodriguez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 15</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 89</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="wallpapers">
+                    <div class="gallery-item-image" style="cursor: pointer;" onclick="viewImageFullscreen('/uploads/20251010_182948_Premium_HD_wallpapers_with_elegant_themes_for_mobile_screen_High-resolution_backgrounds_with_moder.jpeg', 'Premium HD Wallpapers')">
+                        <img src="/uploads/20251010_182948_Premium_HD_wallpapers_with_elegant_themes_for_mobile_screen_High-resolution_backgrounds_with_moder.jpeg" alt="Premium HD" style="height: 280px; object-fit: cover;">
+                        <div class="image-overlay">
+                            <button class="overlay-btn" onclick="event.stopPropagation(); likeItemFromDatabase(2)" title="Dar like"><i class="fas fa-heart"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); shareItem(2)" title="Compartir"><i class="fas fa-share-alt"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); downloadImage('/uploads/20251010_182948_Premium_HD_wallpapers_with_elegant_themes_for_mobile_screen_High-resolution_backgrounds_with_moder.jpeg')" title="Descargar"><i class="fas fa-download"></i></button>
+                            <button class="overlay-btn" onclick="event.stopPropagation(); saveItem(2)" title="Guardar"><i class="fas fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-item-info">
+                        <div class="item-title" onclick="viewImageFullscreen('/uploads/20251010_182948_Premium_HD_wallpapers_with_elegant_themes_for_mobile_screen_High-resolution_backgrounds_with_moder.jpeg', 'Premium HD Wallpapers')" style="cursor: pointer;">Premium HD Wallpapers</div>
+                        <div class="item-author">
+                            <div class="author-avatar">VR</div>
+                            <span>Victor Rodriguez</span>
+                        </div>
+                        <div class="item-stats">
+                            <div class="stat-item"><i class="fas fa-heart"></i> 8</div>
+                            <div class="stat-item"><i class="fas fa-eye"></i> 45</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            console.log('Imágenes mostradas directamente en Explorar:', gallery.children.length);
+        }
+
+        // Mostrar imágenes desde la base de datos
+        function displayImagesFromDatabase(images) {
+            const gallery = document.getElementById('gallery-masonry');
+            
+            if (!gallery) {
+                console.error('No se encontró el elemento gallery-masonry');
+                return;
+            }
+            
+            console.log('Mostrando', images.length, 'imágenes en Explorar');
+            gallery.innerHTML = ''; // Limpiar galería existente
+            
+            if (images.length === 0) {
+                gallery.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No hay imágenes disponibles</div>';
+                return;
+            }
+            
+            images.forEach((image, index) => {
+                console.log('Procesando imagen', index + 1, ':', image.Titulo, 'URL:', image.ImagenURL);
+                
+                // Asegurar que los valores no sean undefined
+                const titulo = image.Titulo || 'Sin título';
+                const imagenUrl = image.ImagenURL || '';
+                const publicacionId = image.PublicacionID || 0;
+                
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.setAttribute('data-category', (image.CategoriaNombre || 'general').toLowerCase());
+                item.setAttribute('data-publicacion-id', publicacionId);
+                const avatar = image.Avatar || 'U';
+                const nombreUsuario = image.NombreUsuario || 'Usuario';
+                const likes = image.Likes || 0;
+                const vistas = image.Vistas || 0;
+                
+                // Crear la imagen con manejo de errores
+                const imgElement = document.createElement('img');
+                imgElement.src = imagenUrl;
+                imgElement.alt = titulo;
+                imgElement.style.cssText = `height: ${Math.floor(Math.random() * 100) + 150}px; object-fit: cover;`; // Imágenes más pequeñas
+                
+                // Manejar error de carga de imagen
+                imgElement.onerror = function() {
+                    console.error('Error al cargar imagen:', imagenUrl);
+                    this.style.display = 'none';
+                    // Mostrar icono de imagen rota
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;';
+                    errorDiv.innerHTML = '<i class="fas fa-image"></i>';
+                    this.parentNode.appendChild(errorDiv);
+                };
+                
+                // Crear el contenedor de la imagen
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'gallery-item-image';
+                imageContainer.style.cssText = 'cursor: pointer; position: relative;';
+                imageContainer.onclick = () => viewImageFullscreen(imagenUrl, titulo);
+                
+                // Crear overlay de botones
+                const overlay = document.createElement('div');
+                overlay.className = 'image-overlay';
+                overlay.innerHTML = `
+                    <button class="overlay-btn" onclick="event.stopPropagation(); likeItemFromDatabase(${publicacionId})" title="Dar like"><i class="fas fa-heart"></i></button>
+                    <button class="overlay-btn" onclick="event.stopPropagation(); shareItem(${publicacionId})" title="Compartir"><i class="fas fa-share-alt"></i></button>
+                    <button class="overlay-btn" onclick="event.stopPropagation(); downloadImage('${imagenUrl}')" title="Descargar"><i class="fas fa-download"></i></button>
+                    <button class="overlay-btn" onclick="event.stopPropagation(); saveItem(${publicacionId})" title="Guardar"><i class="fas fa-bookmark"></i></button>
+                    <button class="overlay-btn delete-btn" onclick="event.stopPropagation(); deleteItem(${publicacionId})" title="Eliminar"><i class="fas fa-trash"></i></button>
+                `;
+                
+                // Crear información del item
+                const itemInfo = document.createElement('div');
+                itemInfo.className = 'gallery-item-info';
+                const descripcion = image.Descripcion || '';
+                itemInfo.innerHTML = `
+                    <div class="item-title" onclick="viewImageFullscreen('${imagenUrl}', '${titulo}')" style="cursor: pointer;">${titulo}</div>
+                    ${descripcion ? `<div class="item-description" style="color: #666; font-size: 14px; margin: 8px 0; line-height: 1.4;">${descripcion}</div>` : ''}
+                    <div class="item-author">
+                        <div class="author-avatar">${avatar}</div>
+                        <span>${nombreUsuario}</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-item"><i class="fas fa-heart"></i> ${formatNumber(likes)}</div>
+                        <div class="stat-item"><i class="fas fa-eye"></i> ${formatNumber(vistas)}</div>
+                    </div>
+                `;
+                
+                // Ensamblar el item
+                imageContainer.appendChild(imgElement);
+                imageContainer.appendChild(overlay);
+                item.appendChild(imageContainer);
+                item.appendChild(itemInfo);
+                
+                gallery.appendChild(item);
+            });
+        }
+
+        // Función para mostrar notificaciones
+        function showNotification(message, type = 'info') {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // Colores según el tipo
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Auto-remover después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Función para eliminar una imagen
+        async function deleteItem(publicacionId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta imagen? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/delete/${publicacionId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Eliminar el elemento del DOM
+                    const item = document.querySelector(`[data-publicacion-id="${publicacionId}"]`);
+                    if (item) {
+                        item.remove();
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    showNotification('Imagen eliminada exitosamente', 'success');
+                    
+                    // Recargar la galería para asegurar consistencia
+                    setTimeout(() => {
+                        loadImagesFromDatabase();
+                    }, 1000);
+                } else {
+                    showNotification('Error al eliminar la imagen: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error al eliminar imagen:', error);
+                showNotification('Error de conexión al eliminar la imagen', 'error');
+            }
+        }
+
+        // Función para formatear números
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Función para dar like conectada a la base de datos
+        async function likeItemFromDatabase(publicacionID) {
+            try {
+                const response = await fetch('/api/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        publicacionID: publicacionID,
+                        usuarioID: 1 // Usuario por defecto
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Actualizar contador en la interfaz
+                    updateLikeCounter(publicacionID, result.newLikeCount);
+                    alert(result.message);
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                console.error('Error al dar like:', error);
+                alert('Error al procesar el like');
+            }
+        }
+
+        // Función para actualizar contador de likes
+        function updateLikeCounter(publicacionID, newCount) {
+            const item = document.querySelector(`[onclick*="likeItemFromDatabase(${publicacionID})"]`).closest('.gallery-item');
+            if (item) {
+                const likeElement = item.querySelector('.stat-item i.fa-heart').parentElement;
+                likeElement.innerHTML = `<i class="fas fa-heart"></i> ${formatNumber(newCount)}`;
+            }
+        }
+
+        // Función mejorada para subir imagen a la base de datos
+        async function uploadImage() {
+            if (!selectedFile) {
+                alert('⚠️ Por favor selecciona una imagen primero');
+                return;
+            }
+
+            try {
+                // Obtener datos del formulario
+                const titulo = document.getElementById('imageTitle').value.trim() || 'Mi Nueva Imagen';
+                const descripcion = document.getElementById('imageDescription').value.trim();
+                
+                // Crear FormData
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+                formData.append('titulo', titulo);
+                formData.append('descripcion', descripcion);
+                formData.append('categoriaID', getRandomCategory());
+                formData.append('usuarioID', 1); // Usuario por defecto
+                
+                // Mostrar loading
+                const uploadBtn = document.querySelector('.btn-primary');
+                const originalText = uploadBtn.textContent;
+                uploadBtn.textContent = 'Subiendo...';
+                uploadBtn.disabled = true;
+                
+                // Enviar a servidor
+                console.log('Iniciando subida de imagen en Explorar...');
+                console.log('Archivo:', selectedFile);
+                console.log('FormData:', formData);
+                
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('Respuesta recibida en Explorar:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Resultado en Explorar:', result);
+                
+                if (result.success) {
+                    // Recargar la galería con la nueva imagen
+                    loadImagesFromDatabase();
+                    
+                    showNotification('✅ Imagen subida exitosamente!', 'success');
+                    closeUploadModal();
+                } else {
+                    throw new Error(result.error || 'Error al subir imagen');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('❌ Error al subir imagen: ' + error.message, 'error');
+            } finally {
+                // Restaurar botón
+                const uploadBtn = document.querySelector('.btn-primary');
+                if (uploadBtn) {
+                    uploadBtn.textContent = 'Publicar';
+                    uploadBtn.disabled = false;
+                }
+                
+                // Limpiar el archivo seleccionado
+                selectedFile = null;
+                document.getElementById('fileInput').value = '';
+            }
+        }
+
+        // Función para obtener categoría aleatoria
+        function getRandomCategory() {
+            const categories = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // IDs de categorías
+            return categories[Math.floor(Math.random() * categories.length)];
+        }
+
+        // Actualizar función de filtrado para usar base de datos
+        function filterByCategory(category) {
+            // Actualizar botones activos de los filtros de categoría
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Actualizar navegación superior
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            
+            // Activar el botón correspondiente en los filtros de categoría
+            const categoryBtn = document.querySelector(`[onclick*="'${category}'"]`);
+            if (categoryBtn) {
+                categoryBtn.classList.add('active');
+            }
+            
+            // Activar el enlace correspondiente en la navegación
+            const navLink = document.querySelector(`[onclick*="'${category}'"]`);
+            if (navLink && navLink.tagName === 'A') {
+                navLink.classList.add('active');
+            }
+
+            // Cargar imágenes desde la base de datos
+            loadImagesFromDatabase(category);
+
+            // Si es la categoría de animales, mostrar opción para ir a página específica
+            if (category === 'animales') {
+                setTimeout(() => {
+                    showAnimalPageOption();
+                }, 500);
+            }
+        }
+
+        // Cargar imágenes al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM cargado en Explorar, iniciando carga de imágenes...');
+            
+            // Cargar solo imágenes de la base de datos
+            setTimeout(() => {
+            loadImagesFromDatabase();
+            }, 500);
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('uploadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUploadModal();
+            }
+        });
+    </script>
+</body>
+</html>

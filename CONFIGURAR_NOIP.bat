@@ -10,7 +10,7 @@ echo.
 
 cd /d "%~dp0"
 
-echo Tu IP publica es: 170.245.166.31
+echo Tu IP publica es: 104.247.81.99
 echo.
 
 echo ================================================
@@ -24,7 +24,7 @@ echo 4. Ve a "My Services" -> "Dynamic DNS"
 echo 5. Crea un nuevo hostname:
 echo    - Hostname: focusview
 echo    - Domain: ddns.net
-echo    - Direccion IP: 170.245.166.31
+echo    - Direccion IP: 104.247.81.99
 echo 6. Guarda la configuracion
 echo.
 echo Tu dominio sera: http://focusview.ddns.net:5000

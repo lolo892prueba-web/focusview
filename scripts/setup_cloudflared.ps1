@@ -1,12 +1,11 @@
 <#
-Setup cloudflared (Windows) - descarga e inicia el proceso de autenticación.
+Setup cloudflared (Windows) - instala usando winget y configura autenticación.
 
-USO: Ejecuta desde PowerShell (puede pedir elevación para mover archivos a Program Files):
+USO: Ejecuta desde PowerShell (puede pedir elevación):
   powershell -ExecutionPolicy Bypass -File .\scripts\setup_cloudflared.ps1
 
 Este script hace:
-- Descarga cloudflared.exe a %USERPROFILE%\Downloads
-- Crea carpeta C:\Program Files\cloudflared y mueve el binario allí
+- Instala cloudflared usando winget (más confiable)
 - Lanza `cloudflared tunnel login` para que autorices en el navegador
 
 IMPORTANTE: No puedo ejecutar esto por ti. Ejecuta el script en tu equipo y sigue las instrucciones.
@@ -17,29 +16,21 @@ Param()
 function Write-Ok($msg){ Write-Host "[OK] $msg" -ForegroundColor Green }
 function Write-Err($msg){ Write-Host "[ERR] $msg" -ForegroundColor Red }
 
-$installPath = "C:\Program Files\cloudflared"
-$downloadUrl = "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe"
-$dest = "$env:USERPROFILE\Downloads\cloudflared.exe"
-
-Write-Host "=> Preparando descarga de cloudflared..."
-try{
-    Invoke-WebRequest -Uri $downloadUrl -OutFile $dest -UseBasicParsing -ErrorAction Stop
-    Write-Ok "Descargado a $dest"
+Write-Host "=> Verificando si winget está disponible..."
+try {
+    winget --version | Out-Null
+    Write-Ok "winget encontrado"
 } catch {
-    Write-Err "Fallo al descargar: $_.Exception.Message"
+    Write-Err "winget no está disponible. Instala Windows Package Manager desde Microsoft Store."
     exit 1
 }
 
-Write-Host "=> Instalando en $installPath (se necesita permisos de administrador para mover a Program Files)"
-if(-not (Test-Path -Path $installPath)){
-    New-Item -ItemType Directory -Path $installPath -Force | Out-Null
-}
-
-try{
-    Move-Item -Path $dest -Destination "$installPath\cloudflared.exe" -Force
-    Write-Ok "Movido a $installPath\cloudflared.exe"
+Write-Host "=> Instalando cloudflared usando winget..."
+try {
+    winget install --id Cloudflare.cloudflared --source winget --accept-package-agreements --accept-source-agreements
+    Write-Ok "cloudflared instalado exitosamente"
 } catch {
-    Write-Err "No se pudo mover el archivo. Ejecuta PowerShell como Administrador y vuelve a intentarlo. Error: $_.Exception.Message"
+    Write-Err "Fallo al instalar cloudflared: $_.Exception.Message"
     exit 1
 }
 
@@ -47,11 +38,12 @@ Write-Host "\nSiguiente paso: autenticar cloudflared con tu cuenta de Cloudflare
 Write-Host "Si no tienes cuenta en Cloudflare, crea una gratis en https://dash.cloudflare.com/"
 
 Write-Host "Ejecutando: cloudflared tunnel login"
-& "$installPath\cloudflared.exe" tunnel login
+cloudflared tunnel login
 
-Write-Host "\nCuando la autenticación termine, crea un túnel (ejemplo):"
+Write-Host "\nCuando la autenticación termine, crea un túnel para focusview.com:"
 Write-Host "  cloudflared tunnel create focusview-tunnel"
-Write-Host "Luego puedes ejecutar el túnel temporal con:"
-Write-Host "  cloudflared tunnel run --url http://localhost:5000"
+Write-Host "  cloudflared tunnel route dns focusview-tunnel focusview.com"
+Write-Host "Luego ejecuta el túnel:"
+Write-Host "  cloudflared tunnel run focusview-tunnel --url http://localhost:5000"
 
-Write-Host "\nTambién puedo darte pasos para instalar cloudflared como servicio si quieres que el túnel arranque automáticamente." -ForegroundColor Yellow
+Write-Host "\nPara HTTPS gratuito en https://focusview.com, asegúrate de que el dominio esté agregado a Cloudflare." -ForegroundColor Yellow

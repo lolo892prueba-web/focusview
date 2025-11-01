@@ -2,7 +2,7 @@
 
 ## ✅ **Estado Actual:**
 - **Servidor funcionando:** `http://localhost:5000`
-- **IP pública:** `170.245.166.31`
+- **IP pública:** `104.247.81.99`
 - **Base de datos:** Conectada ✅
 
 ## 🌐 **Para Dominio Real:**
@@ -11,14 +11,14 @@
 1. Ve a: https://www.noip.com
 2. Crea cuenta gratuita
 3. Crea hostname: `focusview.ddns.net`
-4. Apunta a: `170.245.166.31`
+4. Apunta a: `104.247.81.99`
 5. Tu dominio: `http://focusview.ddns.net:5000`
 
 ### **Opción 2: Dominio Profesional**
 1. Ve a: https://www.godaddy.com
 2. Busca: `focusview.com`
 3. Compra dominio (~$12/año)
-4. Configura DNS: `@` → `170.245.166.31`
+4. Configura DNS: `@` → `104.247.81.99`
 5. Tu dominio: `http://focusview.com:5000`
 
 ## 🔧 **Scripts Disponibles:**
@@ -30,7 +30,7 @@
 
 ## 📱 **Acceso:**
 - **Local:** `http://localhost:5000` ✅
-- **Internet:** `http://170.245.166.31:5000` (necesita router + firewall)
+- **Internet:** `http://104.247.81.99:5000` (necesita router + firewall)
 - **Dominio:** `http://tu-dominio:5000` (una vez configurado)
 
 ¡Tu servidor FocusView está listo! 🎉

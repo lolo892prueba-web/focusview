@@ -10,7 +10,7 @@ echo.
 
 cd /d "%~dp0"
 
-echo Tu IP publica es: 170.245.166.31
+echo Tu IP publica es: 104.247.81.99
 echo Tu IP local es: 192.168.1.3
 echo.
 
@@ -26,7 +26,7 @@ echo - http://192.168.1.3:5000
 echo.
 
 echo ACCESO DESDE INTERNET (una vez configurado):
-echo - http://170.245.166.31:5000
+echo - http://104.247.81.99:5000
 echo - http://focusview.ddns.net:5000 (si configuraste NO-IP)
 echo - http://focusview.duckdns.org:5000 (si configuraste DuckDNS)
 echo.
@@ -49,7 +49,7 @@ echo    - Busca: focusview.com
 echo    - Precio: ~$12/año
 echo.
 echo 2. CONFIGURAR DNS:
-echo    - Apunta el dominio a: 170.245.166.31
+echo    - Apunta el dominio a: 104.247.81.99
 echo.
 echo 3. CONFIGURAR ROUTER:
 echo    - Port Forwarding: Puerto 5000
